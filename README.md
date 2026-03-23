@@ -11,25 +11,8 @@
 ---
 
 ## 🏗️ System Architecture
+<img width="906" height="662" alt="image" src="https://github.com/user-attachments/assets/f3469511-dac6-40a8-8dfc-f7e207bd5921" />
 
-sequenceDiagram
-    participant Mock as Mock Trading Engine
-    participant Kinesis as AWS Kinesis (Stream)
-    participant Consumer as Recon Processor
-    participant SQS as AWS SQS (DLQ)
-    participant AI as FinOps AI Agent (Gemini)
-
-    Mock->>Kinesis: Publish JSON Trades
-    Kinesis->>Consumer: Poll Batches
-    alt Standard Case
-        Consumer->>Consumer: Match Internal Ledger
-    else Anomaly Detected
-        Consumer->>SQS: Move to Dead Letter Queue
-        SQS->>AI: Long Polling Trigger
-        AI->>AI: LangGraph Reasoning
-        AI->>AI: Resolve with Confidence > 0.8
-        AI-->>SQS: Purge Processed Message
-    end
 
 The system is designed with a strict **Event-Driven Architecture (EDA)**, mimicking the infrastructure of top-tier Fintech companies.
 
