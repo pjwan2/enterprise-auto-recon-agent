@@ -40,3 +40,23 @@ This project is fully containerized. You do not need an AWS account; it uses Loc
    ```env
    GOOGLE_API_KEY=your_gemini_api_key_here
    LOCALSTACK_ENDPOINT=http://localstack:4566
+3. Build and launch the microservices cluster: docker-compose up -d --build
+4. Access the FinOps Command Center (HITL Dashboard) at:  http://localhost:8501
+
+
+🔮 Phase 2: Production Readiness & Persistence (Future Enhancements)
+While the current architecture successfully demonstrates the core real-time streaming and AI reasoning loop using an append-only JSONL event log (MVP), deploying this to a Tier-1 financial production environment requires the following persistence upgrades:
+
+Relational Ledger Persistence (PostgreSQL / AWS RDS)
+
+Replace the local .jsonl sink with a PostgreSQL database via SQLAlchemy.
+
+Introduce ACID-compliant transactions to ensure the AI Agent's UPDATE_LEDGER commands are committed idempotently.
+
+NoSQL Audit Trail (AWS DynamoDB)
+
+Store the raw historical LLM reasoning traces (prompts, confidence scores, and raw payloads) in DynamoDB for high-throughput, unstructured compliance auditing.
+
+Frontend State Management
+
+Decouple the Streamlit dashboard into a standard React/Next.js frontend with a FastAPI backend, enabling role-based access control (RBAC) for the human-in-the-loop auditors.
