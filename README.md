@@ -13,44 +13,30 @@ It features a **Human-in-the-Loop (HITL)** dashboard for auditing, ensuring that
 
 ## 🏗️ System Architecture
 
-<img width="898" height="568" alt="image" src="https://github.com/user-attachments/assets/253f0e5a-ecf8-4a0e-b7f1-884a3b4cd82f" />
+<img width="898" height="568" alt="Architecture Diagram" src="https://github.com/user-attachments/assets/253f0e5a-ecf8-4a0e-b7f1-884a3b4cd82f" />
 
+## ✨ Core Enterprise Features
 
- Core Enterprise Features
-Real-Time Streaming: Simulates high-throughput financial data ingestion using AWS Kinesis (via LocalStack).
+* **Real-Time Streaming:** Simulates high-throughput financial data ingestion using AWS Kinesis (via LocalStack).
+* **Poison Pill Mitigation:** Implements a Dead Letter Queue (AWS SQS) pattern to isolate malformed or anomalous transactions without blocking the primary stream shard.
+* **Agentic State Machine:** Utilizes `LangGraph` to orchestrate multi-step LLM reasoning, ensuring deterministic outputs via Pydantic schemas.
+* **Cost-Optimized AI (FinOps):** Dynamically defaults to `gemini-2.5-flash` for high-speed, low-cost anomaly resolution, avoiding expensive "Pro" models for routine deterministic tasks.
+* **Human-in-the-Loop (HITL):** A Streamlit-based Command Center for financial auditors to manually review low-confidence AI decisions.
+* **Production-Grade Resilience:**
+  * **Structured JSON Logging:** Fully integrated `pythonjsonlogger` for direct ingestion into Datadog/Splunk/ELK.
+  * **Graceful Shutdown:** `SIGTERM`/`SIGINT` signal catching ensures in-flight transactions are completely processed before container termination, preventing data loss.
 
-Poison Pill Mitigation: Implements a Dead Letter Queue (AWS SQS) pattern to isolate malformed or anomalous transactions without blocking the primary stream shard.
+## 🚀 Quick Start (Local Deployment)
 
-Agentic State Machine: Utilizes LangGraph to orchestrate multi-step LLM reasoning, ensuring deterministic outputs via Pydantic schemas.
-
-Cost-Optimized AI (FinOps): Dynamically defaults to gemini-2.5-flash for high-speed, low-cost anomaly resolution, avoiding expensive "Pro" models for routine deterministic tasks.
-
-Human-in-the-Loop (HITL): A Streamlit-based Command Center for financial auditors to manually review low-confidence AI decisions.
-
-Production-Grade Resilience:
-
-Structured JSON Logging: Fully integrated pythonjsonlogger for direct ingestion into Datadog/Splunk/ELK.
-
-Graceful Shutdown: SIGTERM/SIGINT signal catching ensures in-flight transactions are completely processed before container termination, preventing data loss.
-
- Quick Start (Local Deployment)
 This project is fully containerized. You do not need an AWS account; it uses LocalStack to mock AWS infrastructure.
 
-Prerequisites
-Docker & Docker Compose
-A Google Gemini API Key
+### Prerequisites
+* Docker & Docker Compose
+* A Google Gemini API Key
 
-Setup
-Clone the repository and navigate to the root directory.
-
-Create a .env file in the root directory:
-
-Code snippet
-GOOGLE_API_KEY=your_gemini_api_key_here
-LOCALSTACK_ENDPOINT=http://localstack:4566
-Build and launch the microservices cluster:
-
-Bash
-docker-compose up -d --build
-Access the FinOps Command Center (HITL Dashboard) at:
-👉 http://localhost:8501
+### Setup
+1. Clone the repository and navigate to the root directory.
+2. Create a `.env` file in the root directory:
+   ```env
+   GOOGLE_API_KEY=your_gemini_api_key_here
+   LOCALSTACK_ENDPOINT=http://localstack:4566
