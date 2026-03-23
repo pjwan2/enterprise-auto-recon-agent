@@ -16,7 +16,7 @@ It features a **Human-in-the-Loop (HITL)** dashboard for auditing, ensuring that
 <img width="898" height="568" alt="image" src="https://github.com/user-attachments/assets/253f0e5a-ecf8-4a0e-b7f1-884a3b4cd82f" />
 
 
-✨ Core Enterprise Features
+ Core Enterprise Features
 Real-Time Streaming: Simulates high-throughput financial data ingestion using AWS Kinesis (via LocalStack).
 
 Poison Pill Mitigation: Implements a Dead Letter Queue (AWS SQS) pattern to isolate malformed or anomalous transactions without blocking the primary stream shard.
@@ -33,7 +33,7 @@ Structured JSON Logging: Fully integrated pythonjsonlogger for direct ingestion 
 
 Graceful Shutdown: SIGTERM/SIGINT signal catching ensures in-flight transactions are completely processed before container termination, preventing data loss.
 
-🚀 Quick Start (Local Deployment)
+ Quick Start (Local Deployment)
 This project is fully containerized. You do not need an AWS account; it uses LocalStack to mock AWS infrastructure.
 
 Prerequisites
