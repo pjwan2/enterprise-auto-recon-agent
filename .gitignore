@@ -1,0 +1,28 @@
+# .gitignore
+
+# 1. Credentials & Environments (STRICTLY IGNORED)
+.env
+.venv
+env/
+venv/
+ENV/
+
+# 2. Local Cloud State (LocalStack)
+.localstack_data/
+
+# 3. Python Artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# 4. Logs & Local Outputs
+*.log
+human_review_dashboard.jsonl
+
+# 5. Infrastructure as Code State (Terraform)
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+*.tfvars
