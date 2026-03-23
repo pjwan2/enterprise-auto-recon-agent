@@ -1,51 +1,57 @@
-# 🏦 Enterprise AI-Driven FinOps Reconciliation Engine
+# 🏦 Enterprise FinOps AI Agent: Real-Time Payment Reconciliation
 
-![Python](https://img.shields.io/badge/Python-3.11%2B-blue?style=for-the-badge&logo=python)
-![AWS](https://img.shields.io/badge/AWS-LocalStack-FF9900?style=for-the-badge&logo=amazonaws)
-![LangChain](https://img.shields.io/badge/LangGraph-Agentic_AI-1C3C3C?style=for-the-badge)
-![Pydantic](https://img.shields.io/badge/Pydantic-V2-E92063?style=for-the-badge)
-![License](https://img.shields.io/badge/License-MIT-success?style=for-the-badge)
+![Python](https://img.shields.io/badge/Python-3.11+-blue.svg)
+![Docker](https://img.shields.io/badge/Docker-Compose-2496ED.svg)
+![AWS](https://img.shields.io/badge/AWS-Kinesis%20%7C%20SQS-FF9900.svg)
+![AI](https://img.shields.io/badge/GenAI-LangGraph%20%7C%20Gemini-4285F4.svg)
+![Status](https://img.shields.io/badge/Status-MVP_Ready-brightgreen.svg)
 
-> An event-driven, resilient microservices architecture simulating high-frequency trading reconciliation. It features a fully autonomous **LangGraph Multi-Agent system** that investigates ledger anomalies, resolves edge cases via LLMs, and safely manages message queue lifecycles.
+## 📖 Executive Summary
+In modern financial systems (e.g., payment gateways, digital wallets), T+1 batch reconciliation is no longer sufficient. This project demonstrates an **Event-Driven, AI-Powered FinOps Architecture** designed to process streaming financial transactions in real-time, instantly detect ledger anomalies, and autonomously resolve discrepancies using a deterministic Agentic Workflow (LangGraph). 
 
----
+It features a **Human-in-the-Loop (HITL)** dashboard for auditing, ensuring that AI operates safely within strict financial compliance boundaries.
 
 ## 🏗️ System Architecture
-<img width="906" height="662" alt="image" src="https://github.com/user-attachments/assets/f3469511-dac6-40a8-8dfc-f7e207bd5921" />
+
+<img width="898" height="568" alt="image" src="https://github.com/user-attachments/assets/253f0e5a-ecf8-4a0e-b7f1-884a3b4cd82f" />
 
 
-The system is designed with a strict **Event-Driven Architecture (EDA)**, mimicking the infrastructure of top-tier Fintech companies.
+✨ Core Enterprise Features
+Real-Time Streaming: Simulates high-throughput financial data ingestion using AWS Kinesis (via LocalStack).
 
-1. **High-Frequency Producer:** Streams simulated financial transactions into AWS Kinesis with strict partition key hashing (`user_id`) to guarantee temporal ordering.
-2. **Real-Time Consumer:** A stream processor that performs real-time ledger vs. gateway reconciliation. Healthy records are cleared; anomalies (e.g., currency slippage, missing gateways) are securely routed to an SQS Dead Letter Queue (DLQ).
-3. **Agentic FinOps Orchestrator:** A LangGraph-powered state machine that polls the DLQ, dynamically discovers the optimal LLM, performs root-cause analysis, and generates deterministic JSON fix payloads.
+Poison Pill Mitigation: Implements a Dead Letter Queue (AWS SQS) pattern to isolate malformed or anomalous transactions without blocking the primary stream shard.
 
----
+Agentic State Machine: Utilizes LangGraph to orchestrate multi-step LLM reasoning, ensuring deterministic outputs via Pydantic schemas.
 
-## 🔥 Engineering Highlights
+Cost-Optimized AI (FinOps): Dynamically defaults to gemini-2.5-flash for high-speed, low-cost anomaly resolution, avoiding expensive "Pro" models for routine deterministic tasks.
 
-This project is built to demonstrate resilience, determinism, and FinOps awareness:
+Human-in-the-Loop (HITL): A Streamlit-based Command Center for financial auditors to manually review low-confidence AI decisions.
 
-* 🛡️ **Poison Pill Loop Prevention:** Engineered a graceful degradation mechanism. If the AI confidence is low (<0.8) or requires human intervention, the payload is safely escalated to a `Human Review Dashboard` and explicitly purged from the DLQ, completely eliminating infinite retry loops and runaway LLM API costs.
-* 📡 **Dynamic Capability Discovery:** To prevent system outages caused by deprecated model endpoints (e.g., 404 Not Found), the Agent utilizes Google Generative AI's `ListModels` registry to dynamically resolve and bind to the most capable, active model at runtime.
-* 🧱 **API-Level Determinism:** Eradicated LLM hallucinations by enforcing strict structured outputs. Utilizing `Pydantic V2` schemas and native API Function Calling, the Agent is constrained to output 100% executable JSON patch payloads.
-* 💰 **Zero-Cost FinOps Sandboxing:** Fully decoupled from production AWS billing. The entire infrastructure (Kinesis, SQS) is orchestrated locally via `LocalStack` and `Docker Compose`, providing a completely isolated and free development environment.
+Production-Grade Resilience:
 
----
+Structured JSON Logging: Fully integrated pythonjsonlogger for direct ingestion into Datadog/Splunk/ELK.
 
-## 🚀 Quick Start (Local Setup)
+Graceful Shutdown: SIGTERM/SIGINT signal catching ensures in-flight transactions are completely processed before container termination, preventing data loss.
 
-### 1. Prerequisites
-* Docker & Docker Compose
-* Python 3.11+
-* A Google Gemini API Key
+🚀 Quick Start (Local Deployment)
+This project is fully containerized. You do not need an AWS account; it uses LocalStack to mock AWS infrastructure.
 
-### 2. Environment Configuration
-Create a `.env` file in the root directory (this is ignored by Git):
-```env
-LOCALSTACK_ENDPOINT=http://localhost:4566
-AWS_ACCESS_KEY_ID=test
-AWS_SECRET_ACCESS_KEY=test
-AWS_DEFAULT_REGION=us-east-1
+Prerequisites
+Docker & Docker Compose
 
+A Google Gemini API Key
+
+Setup
+Clone the repository and navigate to the root directory.
+
+Create a .env file in the root directory:
+
+Code snippet
 GOOGLE_API_KEY=your_gemini_api_key_here
+LOCALSTACK_ENDPOINT=http://localstack:4566
+Build and launch the microservices cluster:
+
+Bash
+docker-compose up -d --build
+Access the FinOps Command Center (HITL Dashboard) at:
+ http://localhost:8501
