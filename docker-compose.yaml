@@ -51,6 +51,21 @@ services:
       # Map the human review file back to your local machine so you can see it
       - ./human_review_dashboard.jsonl:/app/human_review_dashboard.jsonl
 
+  dashboard:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: finops-dashboard
+    command: ["streamlit", "run", "src/dashboard/app.py", "--server.port=8501", "--server.address=0.0.0.0"]
+    ports:
+      - "8501:8501"
+    volumes:
+  
+      - ./human_review_dashboard.jsonl:/app/human_review_dashboard.jsonl
+    environment:
+      - PYTHONUNBUFFERED=1
+
+
   # 4. Mock Trading Engine (Runs once to inject data, then exits)
   mock-trading-engine:
     build: .
