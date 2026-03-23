@@ -12,6 +12,7 @@
 
 ## 🏗️ System Architecture
 
+<img width="878" height="939" alt="image" src="https://github.com/user-attachments/assets/5f497e84-1930-4873-9ede-fa1d35442036" />
 
 
 The system is designed with a strict **Event-Driven Architecture (EDA)**, mimicking the infrastructure of top-tier Fintech companies.
@@ -22,7 +23,7 @@ The system is designed with a strict **Event-Driven Architecture (EDA)**, mimick
 
 ---
 
-## 🔥 Staff-Level Engineering Highlights
+## 🔥 Engineering Highlights
 
 This project is built to demonstrate resilience, determinism, and FinOps awareness:
 
