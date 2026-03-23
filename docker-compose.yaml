@@ -1,0 +1,70 @@
+# docker-compose.yml
+version: "3.8"
+
+services:
+  # 1. AWS Local Cloud Infrastructure
+  localstack:
+    image: localstack/localstack:latest
+    container_name: enterprise-auto-recon-localstack
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=kinesis,sqs
+      - DEBUG=0
+    volumes:
+      - "${LOCALSTACK_VOLUME_DIR:-./.localstack_data}:/var/lib/localstack"
+      # THE MAGIC: Auto-run our init script when LocalStack boots up
+      - ./localstack-init/init-aws.sh:/etc/localstack/init/ready.d/init-aws.sh
+    networks:
+      - recon-network
+
+  # 2. Real-time Reconciliation Consumer
+  recon-consumer:
+    build: .
+    container_name: recon-consumer-service
+    command: python src/recon_processor/consumer.py
+    env_file:
+      - .env
+    environment:
+      - LOCALSTACK_ENDPOINT=http://localstack:4566  # Use internal docker DNS
+    depends_on:
+      - localstack
+    networks:
+      - recon-network
+    restart: always
+
+  # 3. FinOps AI Agent
+  ai-agent:
+    build: .
+    container_name: ai-finops-agent-service
+    command: python src/ai_agent/finops_agent.py
+    env_file:
+      - .env
+    environment:
+      - LOCALSTACK_ENDPOINT=http://localstack:4566
+    depends_on:
+      - localstack
+    networks:
+      - recon-network
+    restart: always
+    volumes:
+      # Map the human review file back to your local machine so you can see it
+      - ./human_review_dashboard.jsonl:/app/human_review_dashboard.jsonl
+
+  # 4. Mock Trading Engine (Runs once to inject data, then exits)
+  mock-trading-engine:
+    build: .
+    container_name: mock-trading-injector
+    command: python src/mock_trading/engine.py
+    env_file:
+      - .env
+    environment:
+      - LOCALSTACK_ENDPOINT=http://localstack:4566
+    depends_on:
+      - localstack
+    networks:
+      - recon-network
+
+networks:
+  recon-network:
+    driver: bridge
