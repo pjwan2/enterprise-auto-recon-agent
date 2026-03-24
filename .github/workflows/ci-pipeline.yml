@@ -39,4 +39,4 @@ jobs:
         python -m py_compile src/mock_trading/engine.py
         python -m py_compile src/recon_processor/consumer.py
         python -m py_compile src/ai_agent/finops_agent.py
-        echo "✅ CI Build & Compilation Successful!"
+        echo " CI Build & Compilation Successful!"
