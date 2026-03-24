@@ -13,8 +13,8 @@ It features a **Human-in-the-Loop (HITL)** dashboard for auditing, ensuring that
 
 ## 🏗️ System Architecture
 
-<img width="898" height="568" alt="Architecture Diagram" src="https://github.com/user-attachments/assets/253f0e5a-ecf8-4a0e-b7f1-884a3b4cd82f" />
-<img width="1039" height="856" alt="image" src="https://github.com/user-attachments/assets/346c2d6d-05ab-47db-9066-86651cc0a43a" />
+<img width="1196" height="998" alt="image" src="https://github.com/user-attachments/assets/ce21d78e-6dec-4a9c-aab3-8d82daee098f" />
+
 
 
 ## ✨ Core Enterprise Features
